@@ -9,10 +9,11 @@ const HOME = () => {
 
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
+  const [loginFailed, setLoginFailed] = useState(false)
   const navigate = useNavigate();
   const login = () => {
     const item = { username, password };
-    axios.post("http://localhost:8080/login", item, {
+    axios.post("http://localhost:8080/login", item, {//get dùng param để ,Post dell dung aram
       headers: {
         'Content-Type': 'application/json'
       }
@@ -22,26 +23,35 @@ const HOME = () => {
         console.log(res.data)
         if (res.data.status === "SUCCESS") {
           sessionStorage.setItem("username", res.data.username)
-          sessionStorage.getItem("username");
           navigate('/MyPages');
-        }
-        if (res.data.username === "admin") {
-          sessionStorage.setItem("username", res.data.username)
+        } if (res.data.username === "admin") {
+          sessionStorage.setItem("username", res.data.username);
           navigate("/AdminPages");
-        }
-        else {
-          alert("fail")
+
+        } else {
+          setLoginFailed(true);
         }
       })
       .catch(error => {
-        alert("")
+        alert("fail")
 
       })
+
+  }
+  const handlePageClick = () => {
+    setLoginFailed(false)
   }
   //Register　遷移
   const goToRegister = useNavigate();
   return (
-    <div className=" Home-main container-flued ">
+    <div
+      onClick={handlePageClick}
+      className=" Home-main container-flued ">
+      {loginFailed && (
+        <h3 className="Home-alert alert alert-danger text-center ">
+          エラー発生しました！もう一度入力してください。
+        </h3>
+      )}
       <div className=" row">
         <div className=" col-6 Home-box1">
           <h1 className=" Home-h1 text-center  text-primary font-weight-bold ">ようこそへ</h1>
@@ -77,18 +87,16 @@ const HOME = () => {
             </div>
             <div className=" border-top border-1 mx-4 mt-3 d-flex justify-content-between ">
               <div className=" mt-3 Home-content " >アカウントまだありません?</div>
-
               <button
                 onClick={() => goToRegister("/Register")}
                 className=" col-4 p-1 ml-3 my-2 Home-btn btn btn-success">
                 登録
               </button>
 
-
             </div>
-            <div className=" d-flex justify-content-center">
+            {/* <div className=" d-flex justify-content-center">
               <p className=" mt-3 d-inline-block  ">パスワード変更したい場合？ <Link className="Home-Link" to="/PassUpdate">こちら</Link> </p>
-            </div>
+            </div> */}
             <div className=" d-flex justify-content-center">
               <p className=" mt-3 d-inline-block  ">パスワード忘れた場合は <Link className="Home-Link" to="/ForgetPass">こちら</Link> </p>
             </div>

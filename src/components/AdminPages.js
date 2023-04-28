@@ -6,19 +6,14 @@ import { useEffect } from "react";
 
 const AdminPages = () => {
     const [userData, setUserData] = useState(Array);
-
-    // ログインる変数名を取得する
-    //ADMINとして仮想変数を作成する
-    // tao bien ao voi tai khoan dang dang nhap la admin
     const username = "admin";
 
     useEffect(() => {
         axios
-            .post(
+            .get(
                 "http://localhost:8080/admin",
                 { username },
                 {
-                    //get dùng param để ,Post dell dung aram
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -57,9 +52,6 @@ const AdminPages = () => {
         }
         return result;
     };
-
-    //DELETE
-
 
     //遷移
     const goToAdminUpdate = useNavigate();
